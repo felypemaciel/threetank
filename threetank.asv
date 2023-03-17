@@ -34,13 +34,11 @@ legend('Tank 1', 'Tank 2', 'Tank 3')
 % equilibrium points
 xss = fsolve(@(x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2),x0);
 
-% state space model
-[A, B, C, D] = lin3tank(xss);
+%% Linearization
 
-% controllability test
-% syms lambda
-% rank([A - lambda*eye(3), B])
+syms S Sp mu m20 g u1 u2 x1 x2 x3
 
-% observability test
-% rank([A'-lambda*eye(3), C'])
+f1 = u1/S - mu*Sp*sqrt(2*g*(x1-x3))/S;
+f2 = q2/S + mu*Sp*sqrt(2*g*(x(3)-x(2)))/S - mu20*Sp*sqrt(2*g*x(2))/S;
+f3 = mu*Sp*sqrt(2*g*(x(1)-x(3)))/S - mu*Sp*sqrt(2*g*(x(3)-x(2)))/S;
 
