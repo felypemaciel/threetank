@@ -44,7 +44,7 @@ xss = fsolve(@(x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2),x0);
 % observability test
 % rank([A'-lambda*eye(3), C'])
 
-t = 0:100:15000;
-y = in_sim(t,S,Sp,mu,mu20,g,q1,q2,x0);
-figure;
-plot(t,y)
+% t = 0:100:15000;
+% y = in_sim(t,S,Sp,mu,mu20,g,q1,q2,x0);
+% figure;
+% plot(t,y)
