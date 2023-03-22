@@ -47,43 +47,84 @@ xss = fsolve(@(x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2),x0);
 % rank([A'-lambda*eye(3), C'])
 
 %% Control simulations
-% Controller for tank 1
-sp = 0.4*ones(length(trange),1);      % setpoint
-sp(10000:20000) = 0.5;
-initial = x0;                       % initial conditions
-controller1 = [0.28, 222, 0];        % controller parameters
-limits = [0, qmax];                 % system's input limits
-
-% [yout, u, e] = control_sim_t1(trange,sp,S,Sp,mu,mu20,g,q1,q2,initial,controller1,limits);
+% % Controller for tank 1
+% sp = 0.4*ones(length(trange),1);      % setpoint
+% sp(10000:20000) = 0.5;
+% initial = x0;                       % initial conditions
+% controller1 = [0.28, 222, 0];        % controller parameters
+% limits = [0, qmax];                 % system's input limits
+% 
+% [yout, u1, e] = control_sim_t1(trange,sp,S,Sp,mu,mu20,g,q1,q2,initial,controller1,limits);
 % 
 % figure;
-% plot(trange,yout);
+% plot(trange,yout,trange,sp,'--');
 % title('Controller for Tank 1 - Active');
 % xlabel('time (s)')
 % ylabel('Water level (m)')
-% legend('tank1','tank2','tank3');
+% legend('tank1','tank2','tank3','setpoint');
+% 
+% u2 = q2*ones(1,length(trange));
+% 
 % 
 % figure; 
-% plot(trange, u);
+% plot(trange, u1, trange, u2);
 % title("Control actions for tank 1 controller");
 % xlabel('time (s)')
 % ylabel('flowrate (m^3s^{-1})')
+% legend('pump1','pump2')
 
-% Controller for tank 2
-sp = 0.4*ones(length(trange),1);      % setpoint
-sp(10000:20000) = 0.5;
-controller2 = [0.21, 246, 0];        % controller parameters
-[yout, u, e] = control_sim_t1(trange,sp,S,Sp,mu,mu20,g,q1,q2,initial,controller2,limits);
+% % Controller for tank 3
+% sp = 0.4*ones(length(trange),1);      % setpoint
+% sp(10000:20000) = 0.5;
+% 
+% Kc = @(tauc) 246/(0.289*tauc);
+% kc = Kc(32768)
+% controller2 = [kc, 246, 0];        % controller parameters
+% [yout, u2, e] = control_sim_t3(trange,sp,S,Sp,mu,mu20,g,q1,q2,initial,controller2,limits);
+% 
+% figure;
+% plot(trange,yout,trange,sp,'--');
+% title('Controller for Tank 3 only');
+% xlabel('time (s)')
+% ylabel('Water level (m)')
+% legend('tank1','tank2','tank3','setpoint');
+% 
+% u1 = q1*ones(1,length(trange));
+% 
+% figure; 
+% plot(trange, u2, trange, q1);
+% title("Control actions for tank 3 controller");
+% xlabel('time (s)')
+% ylabel('flowrate (m^3s^{-1})')
+% legend('pump2','pump1')
+
+trange = 0:0.1:5000;                    % time range
+
+sp1 = 0.45*ones(length(trange),1);      % setpoint for tank 1
+sp1(20000:end) = 0.35;
+sp2 = 0.35*ones(length(trange),1);      % setpoint for tank 2
+
+% Kc = @(tauc) 246/(0.289*tauc);
+% kc = Kc(65536);
+
+ctrl1 = [0.28, 222, 0];                 % controller 1 coefficients
+ctrl2 = [0.013, 246, 0];                % controller 2 coefficients
+
+limits = [0, qmax];                     % pumps flowrates limits
+
+% simulation
+[yout, u, e] = control_sim_t13(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
 
 figure;
 plot(trange,yout);
-title('Controller for Tank 2 - Active');
+title('Simultaneous control')
 xlabel('time (s)')
 ylabel('Water level (m)')
-legend('tank1','tank2','tank3');
+legend('Tank 1', 'Tank 2', 'Tank 3')
 
-figure; 
-plot(trange, u);
-title("Control actions for tank 1 controller");
+figure;
+plot(trange,u);
+title('Control actions');
 xlabel('time (s)')
 ylabel('flowrate (m^3s^{-1})')
+legend('pump1','pump2')
