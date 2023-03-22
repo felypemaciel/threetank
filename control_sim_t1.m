@@ -22,7 +22,7 @@ function [yout, u, e] = control_sim_t1(t,sp,S,Sp,mu,mu20,g,q1,q2,initial,control
     yout(1,:) = initial(1);       % output initial condition
 
     for i = 1:tl-1
-        e(i) = sp - yout(i,1); % error
+        e(i) = sp(i,1) - yout(i,1); % error
         if i > 1
             ie(i) = ie(i+1) + e(i)*dt;
             dyout(i) = (yout(i)-yout(i-1))/dt;
@@ -46,7 +46,8 @@ function [yout, u, e] = control_sim_t1(t,sp,S,Sp,mu,mu20,g,q1,q2,initial,control
             end
     
         ts = [dt*(i-1), dt*i];      % time span
-        q1 = u(i);      % inflow on tank 1
+        % q1 = u(i);      % inflow on tank 1
+        q2 = u(i);      % inflow on tank 2
 
         [l,y] = ode45(@(k,y)nonlinear3tank(k,y,S,Sp,mu,mu20,g,q1,q2),ts,initial);
         yout(i+1,:) = y(end,:);
