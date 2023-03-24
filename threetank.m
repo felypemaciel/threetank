@@ -27,7 +27,7 @@ trange = 0:0.1:5000;      % time range
 % nonlinear model
 [t, xnl] = ode45(@(t,x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2), trange, x0);
 
-plot(t, xnl)
+plot(t, xnl,'linewidth',1)
 title('Open-loop system - constant inputs');
 xlabel('time (s)')
 ylabel('Water level (m)')
@@ -116,14 +116,14 @@ limits = [0, qmax];                     % pumps flowrates limits
 [yout, u, e] = control_sim_t13(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
 
 figure;
-plot(trange,yout);
+plot(trange,yout,'linewidth',1);
 title('Simultaneous control')
 xlabel('time (s)')
 ylabel('Water level (m)')
 legend('Tank 1', 'Tank 2', 'Tank 3')
 
 figure;
-plot(trange,u);
+plot(trange,u,'linewidth',1);
 title('Control actions');
 xlabel('time (s)')
 ylabel('flowrate (m^3s^{-1})')
