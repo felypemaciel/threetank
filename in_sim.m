@@ -10,8 +10,8 @@ function yout = in_sim(t,S,Sp,mu,mu20,g,q1,q2,x0)
             x0 = y(end, :);
         end
         time_span = [dt*(i-1), dt*i];
-        if i*dt >= 3500
-            q1 = 0.44E-4;
+        if i*dt >= 1500
+            q2 = 0.15E-4;
         end
         [~,y] = ode45(@(k,y)nonlinear3tank(k,y,S,Sp,mu,mu20,g,q1,q2), time_span, x0);
         yout(i+1,:) = y(end, :);

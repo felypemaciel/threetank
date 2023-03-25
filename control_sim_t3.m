@@ -22,10 +22,10 @@ function [yout, u, e] = control_sim_t3(t,sp,S,Sp,mu,mu20,g,q1,q2,initial,control
     yout(1,:) = initial(1);       % output initial condition
 
     for i = 1:tl-1
-        e(i) = sp(i,1) - yout(i,3); % error
+        e(i) = sp(i,1) - yout(i,2); % error
         if i > 1
             ie(i) = ie(i+1) + e(i)*dt;
-            dyout(i) = (yout(i,3)-yout(i-1,3))/dt;
+            dyout(i) = (yout(i,2)-yout(i-1,2))/dt;
             initial = y(end,:);
         end
             P(i) = kC*e(i);                 % proportional value at isntant i
