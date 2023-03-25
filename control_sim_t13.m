@@ -91,8 +91,8 @@ function [yout, u, e] = control_sim_t13(t,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,initial,c
     
         ts = [dt*(i-1), dt*i];      % time span
         
-        q1 = u(1,i);                % inflow on tank 1
-        q2 = u(2,i);                % inflow on tank 2
+        q1 = u(1,i) + dec_y1_u2;                % inflow on tank 1
+        q2 = u(2,i) + dec_y2_u1;                % inflow on tank 2
         
         [l,y] = ode45(@(k,y)nonlinear3tank(k,y,S,Sp,mu,mu20,g,q1,q2),ts,initial);
         yout(i+1,:) = y(end,:);

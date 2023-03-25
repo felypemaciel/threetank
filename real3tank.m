@@ -18,8 +18,8 @@ q1 = 0.1E-4;       % pump 1 flow (m3/s)
 q2 = 0.1E-4;        % pump 2 flow (m3/s)
 
 % initial conditions
-x1 = 0.01;           % first tank
-x2 = 0.01;           % second tank
+x1 = 0.03;           % first tank
+x2 = 0.02;           % second tank
 x3 = 0.01;           % thrid tank
 x0 = [x1 x2 x3];
 
@@ -42,13 +42,13 @@ xss = fsolve(@(x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2),x0);
 [A, B, C, D] = lin3tank(xss);
 
 % input simulations
-yout = in_sim(t,S,Sp,mu,mu20,g,q1,q2,x0);
-
-plot(trange,yout,"LineWidth",1);
-title('Input Simulations');
-xlabel('time (s)');
-ylabel('water level (m)');
-grid;
+% yout = in_sim(t,S,Sp,mu,mu20,g,q1,q2,x0);
+% 
+% plot(trange,yout,"LineWidth",1);
+% title('Input Simulations');
+% xlabel('time (s)');
+% ylabel('water level (m)');
+% grid;
 
 % controllability test
 % syms lambda
@@ -125,18 +125,18 @@ ctrl2 = [5.68E-3, 92.7, 0];                % controller 2 coefficients
 limits = [0, qmax];                     % pumps flowrates limits
 
 % simulation
-[yout, u, e] = control_sim_t13(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
-
-figure;
-plot(trange,yout,trange,sp1,'--',trange,sp2,'--');
-title('Simultaneous control')
-xlabel('time (s)')
-ylabel('Water level (m)')
-legend('Tank 1', 'Tank 2', 'Tank 3','sp1','sp2')
-
-figure;
-plot(trange,u);
-title('Control actions');
-xlabel('time (s)')
-ylabel('flowrate (m^3s^{-1})')
-legend('pump1','pump2')
+% [yout, u, e] = control_sim_t13(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
+% 
+% figure;
+% plot(trange,yout,trange,sp1,'--',trange,sp2,'--');
+% title('Simultaneous control')
+% xlabel('time (s)')
+% ylabel('Water level (m)')
+% legend('Tank 1', 'Tank 2', 'Tank 3','sp1','sp2')
+% 
+% figure;
+% plot(trange,u);
+% title('Control actions');
+% xlabel('time (s)')
+% ylabel('flowrate (m^3s^{-1})')
+% legend('pump1','pump2')
