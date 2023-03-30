@@ -7,7 +7,7 @@ Sp = 2.507E-5;      % inter tank cross sectional area (m2)
 mu = 0.5;           % outflow coefficients
 mu20 = 0.675;
 
-qmax = 5E-5;        % maximum flowrate (m3/s)
+qmax = 3.34E-5;        % maximum flowrate (m3/s)
 lmax = 0.26;        % maximum level (m)
 
 g = 9.8;            % gravity (m/s2)
@@ -111,10 +111,16 @@ xss = fsolve(@(x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2),x0);
 % 
 % trange = 0:0.1:5000;                    % time range
 % 
-sp1 = 0.15*ones(length(trange),1);      % setpoint for tank 1
-sp1(20000:end) = 0.25;
+
+% setpoint for tank 1
+sp1 = 0.25*ones(length(trange),1);
+sp1(15000:29999) = 0.15;
+sp1(30000:end) = 0.25;
+
+% setpoint for tank 2
 sp2 = 0.10*ones(length(trange),1);      % setpoint for tank 2
-sp2(20000:end) = 0.05;
+sp2(15000:29999) = 0.05;
+sp2(30000:end) = 0.10;
 
 % Kc = @(tauc) 246/(0.289*tauc);
 % kc = Kc(65536);
@@ -125,18 +131,20 @@ ctrl2 = [5.68E-3, 92.7, 0];                % controller 2 coefficients
 limits = [0, qmax];                     % pumps flowrates limits
 
 % simulation
-% [yout, u, e] = control_sim_t13(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
-% 
-% figure;
-% plot(trange,yout,trange,sp1,'--',trange,sp2,'--');
-% title('Simultaneous control')
-% xlabel('time (s)')
-% ylabel('Water level (m)')
-% legend('Tank 1', 'Tank 2', 'Tank 3','sp1','sp2')
-% 
-% figure;
-% plot(trange,u);
-% title('Control actions');
-% xlabel('time (s)')
-% ylabel('flowrate (m^3s^{-1})')
-% legend('pump1','pump2')
+[yout, u, e] = control_sim_t12(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
+
+figure;
+plot(trange,yout,trange,sp1,'--',trange,sp2,'--','LineWidth',1);
+title('Simultaneous control')
+xlabel('time (s)')
+ylabel('Water level (m)')
+legend('Tank 1', 'Tank 2', 'Tank 3','sp1','sp2')
+grid;
+
+figure;
+plot(trange,u,'LineWidth',1);
+title('Control actions');
+xlabel('time (s)')
+ylabel('flowrate (m^3s^{-1})')
+legend('pump1','pump2')
+grid;
