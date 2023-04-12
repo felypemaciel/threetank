@@ -116,7 +116,7 @@ xss = fsolve(@(x)nonlinear3tank(t,x,S,Sp,mu,mu20,g,q1,q2),x0);
 sp1 = 0.25*ones(length(trange),1);
 sp1(15000:29999) = 0.15;
 sp1(30000:end) = 0.25;
-
+ 
 % setpoint for tank 2
 sp2 = 0.10*ones(length(trange),1);      % setpoint for tank 2
 sp2(15000:29999) = 0.05;
