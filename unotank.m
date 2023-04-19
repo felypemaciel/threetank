@@ -27,7 +27,7 @@ x0 = 2;           % first tank (cm)
 trange = 0:0.1:5000;      % time range
 
 % nonlinear model
-[t, xnl] = ode45(@(t,x)nonlinear1tank(t,x,S,10,mu20,Sp,g), trange, x0);
+[t, xnl] = ode45(@(t,x)nonlinear1tank(t,x,S,35,mu20,Sp,g), trange, x0);
 
 plot(trange,xnl)
 title('Open Loop')
