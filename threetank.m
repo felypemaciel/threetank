@@ -19,7 +19,7 @@ q2 = 0.32E-4;   % pump 2 flow (m3/s)
 % initial conditions
 x1 = 0.1;       % first tank
 x2 = 0.1;       % second tank
-x3 = 0.1;       % thrid tank
+x3 = 0.1;       % third tank
 x0 = [x1 x2 x3];
 
 trange = 0:0.1:5000;      % time range
@@ -113,7 +113,7 @@ ctrl2 = [0.013, 246, 0];                % controller 2 coefficients
 limits = [0, qmax];                     % pumps flowrates limits
 
 % simulation
-[yout, u, e] = control_sim_t13(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
+[yout, u, e] = control_sim_t12(trange,sp1,sp2,S,Sp,mu,mu20,g,q1,q2,x0,ctrl1,ctrl2,limits);
 
 figure;
 plot(trange,yout);
