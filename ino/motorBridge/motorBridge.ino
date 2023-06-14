@@ -1,25 +1,24 @@
 int enable = 3;
 int input1 = 2;
 int input2 = 4;
-int trig = 8;		// trigger pin
-int echo = 9;		// echo pin
 
-float distance = 0;	// distance from HC SR04 to the water (cm)
-float height = 0;	// water level (cm) 
+int trig = 8;
+int echo = 9;
+float distance = 0;
+float height = 0;
 
-float setpoint = 10;		// system's setpoint (cm)
-float error_integral = 0;	// error integral
+float setpoint = 15;
+float error_integral = 0;
+float kC = 3;
+float tauI = 60;
 
-// controller parameters
-float kC = 3;		// kC
-float tauI = 60;	// tauI
+long prevT = 0;
+long input = 0;
 
-// time variables
-long prevT = 0;		// previous time
-
-
-long input = 0;		// L293D input (bit)
-
+const int k = 10;
+float buffer[k];
+int bufferIndex = 0;
+float sum = 0;
 
 long readUltrasonicDistance(int triggerPin, int echoPin)
 {
@@ -52,10 +51,16 @@ void loop() {
 
   long currT = micros();
   float deltaT = ((float) (currT - prevT)/1.0e6);
-  prevT = currT;
+  prevT = currT; 
 
   distance = 0.01723 * readUltrasonicDistance(8, 9);
-  height = 24.5 - distance;
+  height = 25 - distance;
+
+  sum = sum - buffer[bufferIndex] + height;
+  buffer[bufferIndex] = height;
+  bufferIndex = (bufferIndex + 1) % k;
+
+  height = sum / k;
 
   float error = setpoint - height;
   error_integral = error_integral + error*deltaT;
@@ -75,27 +80,36 @@ void loop() {
     error_integral = error_integral - error*deltaT;
   }
 
+   if (currT/1.0e6 < 120) {
+     u = 15;
+  } 
+  // else if ((currT/1.0e6 < 320)) {
+  //   u = 20;
+  // } 
+
   input = ((u/27.8)*255);
   if (input > 255){
     input = 255;
-  }  
+  }
 
-  analogWrite(enable, input);
+  analogWrite(enable, 0);
 
-  float ll = 0;
-  float ul = 20;
+  float ll = 5;
+  float ul = 15;
 
-  Serial.print(ul);
-  Serial.print(", ");
-  Serial.print(ll);  
-  Serial.print(", ");
+  Serial.print(currT/1.0e6);
+  Serial.print(" ");
+  // Serial.print(ul);
+  // Serial.print(", ");
+  // Serial.print(ll);  
+  //Serial.print(", ");
+  //Serial.print(distance);
+  // Serial.print(", ");
   Serial.print(height);
-  Serial.print(" cm, ");
-  Serial.print(setpoint);
-  Serial.print(" cm, ");
-  Serial.print(u);
-  Serial.println(" cm3/s, ");
-  // Serial.print(input);
-  // Serial.println(" bit");
-  delay(10);
+  Serial.print(" ");
+  // Serial.print(setpoint);
+  // Serial.print(", ");
+  Serial.println(u);
+  // Serial.println(" cm3/s");
+  delay(200);
 }
