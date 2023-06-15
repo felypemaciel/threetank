@@ -29,15 +29,15 @@ fclose(s);
 % writematrix(dataVector,'control_action.csv')
 
 subplot(2,1,1);
-plot(dataVector(:,1), dataVector(:,2));
-title('Ultrasonic sensor distance');
+plot(dataVector(:,1), dataVector(:,2), 'LineWidth', 1);
+title('Step response');
 xlabel('time (s)');
-ylabel('distance (cm)');
+ylabel('water level (cm)');
 grid;
 
 subplot(2,1,2);
 plot(dataVector(:,1), dataVector(:,3));
 title('System input - Control action');
 xlabel('time (s)');
-ylabel('distance (cm)');
+ylabel('water flow (cm^3/s)');
 grid;
