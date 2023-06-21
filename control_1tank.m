@@ -1,8 +1,10 @@
-function [yout, u, e] = control_1tank(t,sp,S,Sp,mu20,g,qin,x0,controller,limits)
+function [yout, u, e, I, ie] = control_1tank(t,sp,S,Sp,mu20,g,qin,x0,controller,limits)
     % controller coefficients
     kC = controller(1);     % proportional
     tauI = controller(2);   % integral
     tauD = controller(3);   % derivative
+
+    stime = 120;
 
     tl = length(t);     % time length
     dt = t(2) - t(1);   % dt
@@ -24,15 +26,15 @@ function [yout, u, e] = control_1tank(t,sp,S,Sp,mu20,g,qin,x0,controller,limits)
     for i = 1:tl-1
         e(i) = sp(i) - yout(i,1); % error
         if i > 1
-            ie(i) = ie(i-1) + e(i)*dt;
-            de(i) = (e(i)-e(i-1))/dt;
             x0 = y(end,:);
         end
-        if i*dt < 500
+        if i*dt < stime
             u(i) = qin;
         else
+            ie(i) = ie(i-1) + e(i)*dt;
+            de(i) = (e(i)-e(i-1))/dt;
             P(i) = kC*e(i);                 % proportional value at isntant i
-            I(i) = kC/tauI * ie(i);         % integral value at instant i
+            I(i) = (kC/tauI) * ie(i);         % integral value at instant i
             D(i) = -kC*tauD*de(i);       % derivative value at isntant i
             u(i) = P(i) + I(i) + D(i);      % controller output at instant i
 
