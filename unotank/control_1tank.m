@@ -1,3 +1,6 @@
+%% control_1tank
+% That's where the controller output is calculated using a PID control.
+
 function [yout, u, e, I, ie] = control_1tank(t,sp,S,Sp,mu20,g,qin,x0,controller,limits)
     % controller coefficients
     kC = controller(1);     % proportional

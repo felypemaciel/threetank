@@ -1,3 +1,7 @@
+%% arduino_matlab
+% This code is been used to obtain the data from Arduino, save it as a .mat
+% or .csv file and to plot the data.
+
 close all;
 
 % delete(instrfind({'Port'},{'COM3'}));
