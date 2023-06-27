@@ -25,7 +25,7 @@ qin = 15;       % pump 1 flow (cm3/s)
 % initial conditions
 x0 = 1;           % first tank (cm)
 
-trange = 0:0.1:5000;      % time range
+trange = 0:0.1:1500;      % time range
 
 % nonlinear model
 [t, xnl] = ode45(@(t,x)nonlinear1tank(t,x,S,qin,mu,Sp,g), trange, x0);
@@ -61,9 +61,9 @@ B = eval(B_ss);
 C = 1;
 D = 0;
 
-yout = inputsim_1tank(t,S,qin,mu,Sp,g,x0);
+y_insim = inputsim_1tank(t,S,qin,mu,Sp,g,x0);
 figure; 
-plot(trange, yout);
+plot(trange, y_insim);
 title('Step Response');
 ylabel('height (cm)');
 xlabel('time (s)');
@@ -71,11 +71,11 @@ grid;
 axis([0 350 0 15])
 
 sp = 10*ones(length(trange),1);
-sp(5000:end) = 10;
-sp(15000:end) = 15;
-sp(25000:end) = 10;
-sp(35000:end) = 5;
-sp(45000:end) = 24;
+sp(1200:end) = 10;
+sp(4000:end) = 15;
+sp(6500:end) = 10;
+sp(8000:end) = 5;
+sp(10500:end) = 10;
 [yout, u, e, I, ie] = control_1tank(t,sp,S,Sp,mu,g,qin,x0,[9.0625, 30.74, 0],[0 qmax]);
 figure; 
 plot(trange, yout, 'LineWidth', 1);
